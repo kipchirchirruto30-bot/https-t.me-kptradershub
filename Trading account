@@ -1,0 +1,955 @@
+Here is a realistic HTML/CSS/JS trading dashboard UI. It's a functional web page that simulates a professional crypto trading interface.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS · trading dashboard</title>
+  <!-- Font Awesome 6 (icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Font: Inter + JetBrains Mono for numbers -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #0b0e11;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #eaecef;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* main dashboard card – realistic trading UI */
+    .trading-dashboard {
+      max-width: 1360px;
+      width: 100%;
+      background: #12161c;
+      border-radius: 28px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+      overflow: hidden;
+      padding: 24px 28px;
+      border: 1px solid #1e252e;
+      transition: all 0.2s ease;
+    }
+
+    /* ----- header ----- */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      background: #2c3b4c;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: #f0b90b;
+      box-shadow: 0 4px 10px rgba(240, 185, 11, 0.15);
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #fff 0%, #b7c0cd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo-text span {
+      color: #f0b90b;
+      -webkit-text-fill-color: #f0b90b;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      background: #0d1117;
+      padding: 6px;
+      border-radius: 40px;
+      border: 1px solid #262e38;
+    }
+
+    .nav-item {
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #9aa8b9;
+      cursor: default;
+      transition: all 0.2s;
+    }
+
+    .nav-item.active {
+      background: #1f2a36;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-item i {
+      margin-right: 6px;
+      font-size: 13px;
+    }
+
+    .user-area {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .balance-badge {
+      background: #1b232c;
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      font-weight: 600;
+      border: 1px solid #2c3743;
+      color: #d1d9e6;
+    }
+
+    .balance-badge i {
+      color: #f0b90b;
+      margin-right: 8px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #2b3b4c, #1f2a36);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+      border: 1px solid #3b4a5a;
+      color: #eaecef;
+      cursor: default;
+    }
+
+    /* ----- main grid (chart + order book) ----- */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 22px;
+      margin-bottom: 24px;
+    }
+
+    /* ----- chart panel ----- */
+    .chart-panel {
+      background: #0d1117;
+      border-radius: 22px;
+      padding: 22px 24px 20px 24px;
+      border: 1px solid #1e252e;
+      box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.6);
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .pair-info {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .pair-info h2 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .pair-info h2 span {
+      color: #f0b90b;
+    }
+
+    .badge-high {
+      background: #1e2b3a;
+      color: #7f9bb7;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .price-large {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+    }
+
+    .price-large .change {
+      font-size: 16px;
+      margin-left: 12px;
+      font-weight: 500;
+      color: #f6465d;
+    }
+
+    .price-large .change.positive {
+      color: #0ecb81;
+    }
+
+    .timeframe-group {
+      display: flex;
+      gap: 6px;
+      background: #0b0e11;
+      padding: 4px;
+      border-radius: 40px;
+      border: 1px solid #1e252e;
+    }
+
+    .tf-btn {
+      padding: 5px 14px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #8b9aae;
+      background: transparent;
+      border: none;
+      cursor: default;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+    }
+
+    .tf-btn.active {
+      background: #202b38;
+      color: #f0b90b;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .chart-canvas-container {
+      position: relative;
+      height: 240px;
+      width: 100%;
+      margin: 8px 0 6px;
+      background: #0b0f14;
+      border-radius: 14px;
+      padding: 8px 4px;
+      border: 1px solid #1d2631;
+    }
+
+    canvas#priceChart {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+      border-radius: 10px;
+    }
+
+    .chart-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 16px;
+      color: #7f8b9c;
+      font-size: 13px;
+    }
+
+    .indicators {
+      display: flex;
+      gap: 18px;
+    }
+
+    .indicators i {
+      margin-right: 6px;
+      color: #f0b90b;
+      font-size: 12px;
+    }
+
+    /* ----- order book panel ----- */
+    .orderbook-panel {
+      background: #0d1117;
+      border-radius: 22px;
+      padding: 20px;
+      border: 1px solid #1e252e;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.6);
+    }
+
+    .orderbook-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      color: #cfd9e6;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .orderbook-header i {
+      color: #7f8b9c;
+      margin-left: 8px;
+      font-size: 13px;
+    }
+
+    .order-book-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      padding: 6px 4px;
+      border-bottom: 1px solid #161e27;
+      position: relative;
+    }
+
+    .order-book-row .price-bid {
+      color: #0ecb81;
+    }
+
+    .order-book-row .price-ask {
+      color: #f6465d;
+    }
+
+    .order-book-row .amount {
+      color: #c4d0de;
+      font-weight: 500;
+      margin-left: auto;
+      margin-right: 16px;
+    }
+
+    .order-book-row .total {
+      color: #7b8a9e;
+      font-weight: 400;
+      width: 60px;
+      text-align: right;
+    }
+
+    .depth-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: rgba(14, 203, 129, 0.08);
+      width: 0%;
+      z-index: -1;
+      border-radius: 2px;
+    }
+
+    .order-book-row.ask .depth-bar {
+      background: rgba(246, 70, 93, 0.08);
+    }
+
+    .mid-price-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 4px;
+      margin: 4px 0;
+      border-top: 1px solid #1e2a36;
+      border-bottom: 1px solid #1e2a36;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 18px;
+      color: #f0b90b;
+    }
+
+    .mid-price-row i {
+      font-size: 14px;
+      margin-right: 6px;
+      color: #d1d9e6;
+    }
+
+    /* ----- action bar (buy/sell) ----- */
+    .action-bar {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 26px;
+      flex-wrap: wrap;
+      background: #0d1117;
+      border-radius: 60px;
+      padding: 10px 16px;
+      border: 1px solid #1e252e;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-buy,
+    .btn-sell {
+      border: none;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 12px 32px;
+      border-radius: 40px;
+      cursor: default;
+      font-family: 'Inter', sans-serif;
+      transition: 0.1s;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-buy {
+      background: #0ecb81;
+      color: #0b0e11;
+    }
+
+    .btn-sell {
+      background: #f6465d;
+      color: #ffffff;
+    }
+
+    .btn-buy i,
+    .btn-sell i {
+      margin-right: 8px;
+      font-size: 15px;
+    }
+
+    .order-type {
+      display: flex;
+      gap: 16px;
+      margin-left: 10px;
+      font-size: 14px;
+      color: #9aa8b9;
+    }
+
+    .order-type span.active {
+      color: #f0b90b;
+      font-weight: 600;
+      border-bottom: 2px solid #f0b90b;
+      padding-bottom: 4px;
+    }
+
+    .quantity-preview {
+      margin-left: auto;
+      display: flex;
+      gap: 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #b6c2d3;
+    }
+
+    .quantity-preview span {
+      color: #eaecef;
+      font-weight: 600;
+    }
+
+    /* ----- bottom table (open orders) ----- */
+    .orders-section {
+      background: #0d1117;
+      border-radius: 22px;
+      padding: 20px 24px;
+      border: 1px solid #1e252e;
+      margin-top: 8px;
+    }
+
+    .orders-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
+    .orders-header span {
+      font-weight: 600;
+      color: #d1d9e6;
+    }
+
+    .orders-header .filters {
+      display: flex;
+      gap: 18px;
+      color: #8996a8;
+    }
+
+    .orders-header .filters i {
+      margin-right: 6px;
+      font-size: 12px;
+    }
+
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .orders-table th {
+      text-align: left;
+      color: #7b8a9e;
+      font-weight: 500;
+      padding-bottom: 10px;
+      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.3px;
+    }
+
+    .orders-table td {
+      padding: 10px 0;
+      border-bottom: 1px solid #1a222c;
+      color: #cbd5e2;
+    }
+
+    .orders-table td:first-child {
+      color: #f0b90b;
+    }
+
+    .orders-table .buy-color {
+      color: #0ecb81;
+    }
+
+    .orders-table .sell-color {
+      color: #f6465d;
+    }
+
+    .status-badge {
+      background: #1f2a36;
+      padding: 3px 10px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-family: 'Inter', sans-serif;
+      color: #b4c2d4;
+      font-weight: 500;
+    }
+
+    /* small responsive adjustments */
+    @media (max-width: 1000px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+      .trading-dashboard {
+        padding: 18px;
+      }
+      .orderbook-panel {
+        display: none; /* simplified on mobile – but we keep for realism? optional */
+      }
+    }
+
+    @media (max-width: 700px) {
+      .header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .nav-links {
+        justify-content: center;
+      }
+      .user-area {
+        justify-content: space-between;
+      }
+      .action-bar {
+        flex-direction: column;
+        align-items: stretch;
+        border-radius: 30px;
+      }
+      .quantity-preview {
+        margin-left: 0;
+        justify-content: space-between;
+      }
+    }
+
+    /* live dot animation */
+    .live-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #0ecb81;
+      border-radius: 50%;
+      margin-right: 6px;
+      box-shadow: 0 0 8px #0ecb81;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+  </style>
+</head>
+<body>
+  <div class="trading-dashboard">
+    <!-- header -->
+    <div class="header">
+      <div class="logo-area">
+        <div class="logo-icon"><i class="fas fa-cube"></i></div>
+        <div class="logo-text">NEXUS<span>TRADE</span></div>
+      </div>
+      <div class="nav-links">
+        <div class="nav-item active"><i class="fas fa-chart-line"></i> Trade</div>
+        <div class="nav-item"><i class="fas fa-wallet"></i> Portfolio</div>
+        <div class="nav-item"><i class="fas fa-bolt"></i> Futures</div>
+      </div>
+      <div class="user-area">
+        <div class="balance-badge"><i class="fas fa-coins"></i> $12,480.50</div>
+        <div class="avatar">JD</div>
+      </div>
+    </div>
+
+    <!-- main grid: chart + orderbook -->
+    <div class="main-grid">
+      <!-- chart panel -->
+      <div class="chart-panel">
+        <div class="chart-header">
+          <div class="pair-info">
+            <h2>BTC<span>/USDT</span></h2>
+            <div class="badge-high"><span class="live-dot"></span> LIVE</div>
+          </div>
+          <div class="price-large">
+            $67,432.80
+            <span class="change positive"><i class="fas fa-arrow-up"></i> 2.34%</span>
+          </div>
+          <div class="timeframe-group">
+            <button class="tf-btn active">1m</button>
+            <button class="tf-btn">5m</button>
+            <button class="tf-btn">15m</button>
+            <button class="tf-btn">1H</button>
+            <button class="tf-btn">4H</button>
+            <button class="tf-btn">1D</button>
+          </div>
+        </div>
+
+        <!-- canvas chart container (simulated candlestick / line) -->
+        <div class="chart-canvas-container">
+          <canvas id="priceChart" width="900" height="240"></canvas>
+        </div>
+
+        <div class="chart-footer">
+          <div class="indicators">
+            <span><i class="fas fa-circle"></i> EMA 12</span>
+            <span><i class="fas fa-circle" style="color:#f6465d;"></i> EMA 26</span>
+            <span><i class="fas fa-chart-bar"></i> Volume</span>
+          </div>
+          <div><i class="far fa-clock"></i> 24h Vol: $1.84B</div>
+        </div>
+      </div>
+
+      <!-- order book panel (realistic bids/asks) -->
+      <div class="orderbook-panel">
+        <div class="orderbook-header">
+          <span>Order Book <i class="fas fa-chevron-down"></i></span>
+          <span><i class="fas fa-sliders-h"></i> 0.1</span>
+        </div>
+        <!-- Asks (sell orders) -->
+        <div class="order-book-row ask">
+          <div class="depth-bar" style="width: 48%;"></div>
+          <span class="price-ask">67,485.20</span>
+          <span class="amount">0.243</span>
+          <span class="total">16.4K</span>
+        </div>
+        <div class="order-book-row ask">
+          <div class="depth-bar" style="width: 72%;"></div>
+          <span class="price-ask">67,472.50</span>
+          <span class="amount">0.851</span>
+          <span class="total">57.5K</span>
+        </div>
+        <div class="order-book-row ask">
+          <div class="depth-bar" style="width: 31%;"></div>
+          <span class="price-ask">67,460.10</span>
+          <span class="amount">0.132</span>
+          <span class="total">8.9K</span>
+        </div>
+        <div class="order-book-row ask">
+          <div class="depth-bar" style="width: 91%;"></div>
+          <span class="price-ask">67,445.80</span>
+          <span class="amount">1.264</span>
+          <span class="total">85.3K</span>
+        </div>
+        <div class="order-book-row ask">
+          <div class="depth-bar" style="width: 24%;"></div>
+          <span class="price-ask">67,432.90</span>
+          <span class="amount">0.056</span>
+          <span class="total">3.8K</span>
+        </div>
+        <!-- mid price -->
+        <div class="mid-price-row">
+          <span><i class="fas fa-long-arrow-alt-up"></i> 67,432.80</span>
+          <span><i class="fas fa-long-arrow-alt-down"></i> 67,432.75</span>
+        </div>
+        <!-- Bids (buy orders) -->
+        <div class="order-book-row">
+          <div class="depth-bar" style="width: 62%;"></div>
+          <span class="price-bid">67,432.40</span>
+          <span class="amount">0.742</span>
+          <span class="total">50.1K</span>
+        </div>
+        <div class="order-book-row">
+          <div class="depth-bar" style="width: 39%;"></div>
+          <span class="price-bid">67,421.10</span>
+          <span class="amount">0.236</span>
+          <span class="total">15.9K</span>
+        </div>
+        <div class="order-book-row">
+          <div class="depth-bar" style="width: 87%;"></div>
+          <span class="price-bid">67,408.30</span>
+          <span class="amount">1.152</span>
+          <span class="total">77.7K</span>
+        </div>
+        <div class="order-book-row">
+          <div class="depth-bar" style="width: 55%;"></div>
+          <span class="price-bid">67,395.60</span>
+          <span class="amount">0.554</span>
+          <span class="total">37.3K</span>
+        </div>
+        <div class="order-book-row">
+          <div class="depth-bar" style="width: 23%;"></div>
+          <span class="price-bid">67,382.20</span>
+          <span class="amount">0.091</span>
+          <span class="total">6.1K</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- action bar: Buy / Sell, order types -->
+    <div class="action-bar">
+      <div class="action-buttons">
+        <button class="btn-buy"><i class="fas fa-arrow-up"></i> Buy</button>
+        <button class="btn-sell"><i class="fas fa-arrow-down"></i> Sell</button>
+      </div>
+      <div class="order-type">
+        <span class="active">Limit</span>
+        <span>Market</span>
+        <span>Stop</span>
+      </div>
+      <div class="quantity-preview">
+        <div>Avbl: <span>2.143 BTC</span></div>
+        <div>Max Buy: <span>0.45 BTC</span></div>
+      </div>
+    </div>
+
+    <!-- open orders table -->
+    <div class="orders-section">
+      <div class="orders-header">
+        <span><i class="fas fa-list-ul"></i> Open Orders (2)</span>
+        <div class="filters">
+          <span><i class="fas fa-filter"></i> All</span>
+          <span><i class="fas fa-history"></i> History</span>
+        </div>
+      </div>
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Pair</th>
+            <th>Type</th>
+            <th>Side</th>
+            <th>Price</th>
+            <th>Amount</th>
+            <th>Filled</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>BTC/USDT</td>
+            <td>Limit</td>
+            <td class="buy-color">Buy</td>
+            <td>66,800.00</td>
+            <td>0.125</td>
+            <td>0.00</td>
+            <td><span class="status-badge">Open</span></td>
+          </tr>
+          <tr>
+            <td>BTC/USDT</td>
+            <td>Limit</td>
+            <td class="sell-color">Sell</td>
+            <td>68,200.00</td>
+            <td>0.310</td>
+            <td>0.00</td>
+            <td><span class="status-badge">Open</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- JavaScript: draw a realistic candlestick/line chart on canvas -->
+  <script>
+    (function() {
+      const canvas = document.getElementById('priceChart');
+      if (!canvas) return;
+      
+      // set canvas resolution for crispness
+      function resizeCanvas() {
+        const container = canvas.parentElement;
+        const dpr = window.devicePixelRatio || 1;
+        const rect = container.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        const ctx = canvas.getContext('2d');
+        ctx.scale(dpr, dpr);
+        drawChart();
+      }
+
+      function drawChart() {
+        const container = canvas.parentElement;
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        if (w === 0 || h === 0) return;
+
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, w, h);
+
+        // background grid (subtle)
+        ctx.strokeStyle = '#1a222c';
+        ctx.lineWidth = 0.6;
+        for (let i = 0; i <= 6; i++) {
+          const y = (h / 6) * i;
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(w, y);
+          ctx.strokeStyle = '#1a222c';
+          ctx.stroke();
+        }
+
+        // fake price data for a realistic line chart + some candlesticks
+        const dataPoints = 42;
+        const prices = [];
+        let base = 67200;
+        for (let i = 0; i < dataPoints; i++) {
+          // random walk with slight upward trend
+          const change = (Math.random() - 0.48) * 220;
+          base += change;
+          // clamp
+          if (base < 66400) base = 66400;
+          if (base > 68000) base = 68000;
+          prices.push(base);
+        }
+
+        // find min/max
+        const minPrice = Math.min(...prices) - 30;
+        const maxPrice = Math.max(...prices) + 30;
+        const range = maxPrice - minPrice;
+
+        function getY(price) {
+          return h - ((price - minPrice) / range) * h;
+        }
+
+        function getX(index) {
+          return (index / (dataPoints - 1)) * w;
+        }
+
+        // draw a smooth line
+        ctx.beginPath();
+        ctx.strokeStyle = '#f0b90b';
+        ctx.lineWidth = 2.2;
+        ctx.shadowColor = 'rgba(240, 185, 11, 0.3)';
+        ctx.shadowBlur = 10;
+        for (let i = 0; i < dataPoints; i++) {
+          const x = getX(i);
+          const y = getY(prices[i]);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // fill under the line
+        ctx.beginPath();
+        ctx.moveTo(0, h);
+        for (let i = 0; i < dataPoints; i++) {
+          const x = getX(i);
+          const y = getY(prices[i]);
+          ctx.lineTo(x, y);
+        }
+        ctx.lineTo(w, h);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(240, 185, 11, 0.08)';
+        ctx.fill();
+
+        // draw some small candlestick-like markers (as per realism)
+        for (let i = 1; i < dataPoints; i += 2) {
+          const x = getX(i);
+          const priceOpen = prices[i-1];
+          const priceClose = prices[i];
+          const high = Math.max(priceOpen, priceClose) + (Math.random() * 18);
+          const low = Math.min(priceOpen, priceClose) - (Math.random() * 18);
+          const yHigh = getY(high);
+          const yLow = getY(low);
+          const yOpen = getY(priceOpen);
+          const yClose = getY(priceClose);
+          const isGreen = priceClose >= priceOpen;
+          ctx.fillStyle = isGreen ? '#0ecb81' : '#f6465d';
+          ctx.strokeStyle = isGreen ? '#0ecb81' : '#f6465d';
+          ctx.lineWidth = 1;
+          // wick
+          ctx.beginPath();
+          ctx.moveTo(x, yHigh);
+          ctx.lineTo(x, yLow);
+          ctx.stroke();
+          // body
+          const bodyWidth = 5;
+          const bodyTop = Math.min(yOpen, yClose);
+          const bodyBottom = Math.max(yOpen, yClose);
+          ctx.fillRect(x - bodyWidth/2, bodyTop, bodyWidth, bodyBottom - bodyTop);
+        }
+
+        // draw last price dot
+        const lastX = getX(dataPoints - 1);
+        const lastY = getY(prices[dataPoints - 1]);
+        ctx.beginPath();
+        ctx.arc(lastX, lastY, 5, 0, Math.PI * 2);
+        ctx.fillStyle = '#f0b90b';
+        ctx.shadowColor = '#f0b90b';
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // small label
+        ctx.font = '10px "JetBrains Mono", monospace';
+        ctx.fillStyle = '#c4d0de';
+        ctx.fillText('$67,432', w - 70, lastY - 10);
+      }
+
+      // initial draw
+      resizeCanvas();
+
+      // redraw on window resize
+      window.addEventListener('resize', () => {
+        resizeCanvas();
+      });
+
+      // optional: slight animation every few seconds (simulate live)
+      setInterval(() => {
+        drawChart(); // redraw with new random data (quick flicker)
+      }, 4000);
+    })();
+  </script>
+</body>
+</html>
+```
+
+Trading Dashboard Core Modules
+
+This interface is built around key functional areas that support the trading workflow.
+
+· Market Overview & Chart: The central panel displays the current trading pair (BTC/USDT), its price, and percentage change. A simulated candlestick chart provides a visual representation of price movement.
+· Order Book: The right panel shows a live order book with bids and asks, including price, amount, and cumulative total for each level.
+· Order Entry: The action bar allows you to select Buy or Sell, choose an order type (Limit, Market, Stop), and see available quantities.
+· Open Orders: The bottom table lists your active orders with details like pair, type, side, price, and status.
+
+---
+
+Optimization Tip: You can replace the simulated price data in the prices array within the drawChart function and the order book values in the HTML with real data from your trading backend.
